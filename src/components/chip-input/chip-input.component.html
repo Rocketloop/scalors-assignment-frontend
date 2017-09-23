@@ -2,5 +2,18 @@
     <div class='selectedItem' *ngFor='let item of selectedItems; let i = index;'>
         <a href='#' (click)='removeItem(i)'class='badge badge-secondary'>{{item}} <span class='fa fa-times'></span></a>
     </div>
-        <input #suggestionList type='text' (keyup)='writeValue($event)' class='customInput' placeholder='Type a programming language' />
+    <input #hiddenInput type='text' class='customInput' placeholder='Type a programming language' />
+
+    <template #suggestionsTpl>
+        <section class="list-group results" *ngIf="showSuggestions">
+            <button type="button"
+                    class="list-group-item"
+                    *ngFor="let result of suggestionList; let i = index;"
+                    [class.active]="markActive(i, result)"
+                    (click)="handleSelectSuggestion(result)">
+                <span><i class="fa fa-search"></i> {{ result }}</span>
+            </button>
+        </section>
+    </template>
 </div>
+{{suggestionList |json}}
