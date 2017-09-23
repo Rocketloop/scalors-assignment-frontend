@@ -20,7 +20,6 @@ import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/map';
 
 enum Key {
-    Back    = 8,
     Tab     = 9,
     Enter   = 13,
     Esc     = 27,
@@ -41,7 +40,7 @@ enum Key {
     }]
 })
 export class ChipInputComponent implements ControlValueAccessor, OnInit, OnDestroy {
-    @Input() public typeahead: any[] = [];
+    @Input() public typeahead: Observable<string[]> = Observable.of([]);
     @ViewChild('hiddenInput') public hiddenInput: ElementRef;
     @ViewChild('suggestionTpl') public suggestionTpl: ElementRef;
 
@@ -55,10 +54,11 @@ export class ChipInputComponent implements ControlValueAccessor, OnInit, OnDestr
     constructor() {}
 
     ngOnInit() {
-        //const keyDown = Observable.fromEvent(this.hiddenInput.nativeElement, 'keydown').publish();
-        const keyDown = this.onElementKeyDown();
+        const keyup = Observable.fromEvent(this.hiddenInput.nativeElement, 'keyup').share();
         this.subscrPool = [
-            this.findSuggestion(keyDown)
+            this.findSuggestion(keyup),
+            this.controlDeletion(keyup),
+            this.keyboardNavigate(keyup)
         ];
     }
 
@@ -67,18 +67,13 @@ export class ChipInputComponent implements ControlValueAccessor, OnInit, OnDestr
         this.subscrPool.length = 0;
     }
 
-    public writeValue (e: KeyboardEvent): void {
-        /*
-        if (e.keyCode === Key.Back && this.hiddenInput.nativeElement.value == '') {
-            this.removeItem(this.selectedItems.length - 1);
+    public writeValue (value: any): void {
+        if (value !== '' && this.selectedItems.indexOf(value) < 0) {
+            this.selectedItems.push(value);
             this._onChange(this.selectedItems);
         }
-        if (e.keyCode === Key.Enter && this.hiddenInput.nativeElement.value !== '') {
-            this.selectedItems.push(this.hiddenInput.nativeElement.value);
-            this.hiddenInput.nativeElement.value = '';
-            this._onChange(this.selectedItems);
-        }
-        */
+        this.hiddenInput.nativeElement.value = '';
+        this.suggestionList = [];
     }
 
     public registerOnChange (fn: any ): void {
@@ -93,23 +88,37 @@ export class ChipInputComponent implements ControlValueAccessor, OnInit, OnDestr
         }
     }
 
-    onElementKeyDown() {
-        return Observable.fromEvent(this.hiddenInput.nativeElement, 'keyup').share();
-    }
-
     public findSuggestion(keyObj: Observable<{}>) {
         return keyObj.filter((e: any) => this.filterNonCharKey(e.keyCode))
             .map((e: any) => e.target.value )
             .debounceTime(350)
             .concat()
-            .distinctUntilChanged()
             .filter((q: string) => q.length > 0)
             .switchMap((q: string) => this.findInArray(q))
             .subscribe( (results: string[]) => {
-                console.log(results);
                 this.suggestionList = results;
                 this.showSuggestions = true;
+                this.selectedIndex = 0;
             });
+    }
+
+    public controlDeletion(keyObj) {
+        return keyObj.filter((e: any) => e.keyCode === 8) //handle backspace
+            .subscribe(x => {
+                if (this.hiddenInput.nativeElement.value == '' && this.selectedItems.length > 0) {
+                    this.removeItem(this.selectedItems.length - 1);
+                }
+            });
+    }
+
+    public keyboardNavigate(keyObj) {}
+
+    public markActive(index: number) {
+        return (index === this.selectedIndex);
+    }
+
+    public handleSelectSuggestion(item: string) {
+        this.writeValue(item);
     }
 
     private findInArray(query: string): Observable<string[]> {
