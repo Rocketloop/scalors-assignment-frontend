@@ -1,0 +1,22 @@
+.customInput {
+    background: transparent;
+    border: transparent !important;
+    padding-left: 0;
+    outline: none;
+    width: 30%;
+}
+
+.fakeInput {
+    padding: .25rem;
+    border: .5px solid #dbdbdb;
+    border-radius: 5px;
+}
+
+.selectedItem {
+    display: inline;
+}
+
+.list-group-item {
+    padding: 0.25rem;
+    overflow: auto;
+}

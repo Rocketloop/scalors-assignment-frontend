@@ -1,0 +1,15 @@
+<div>
+    <div class='fakeInput'>
+        <div class='selectedItem' *ngFor='let item of selectedItems; let i = index;'>
+            <a href='#' (click)='removeItem(i)'class='badge badge-secondary'>{{item}} <span class='fa fa-times'></span></a>
+        </div>
+        <input #hiddenInput type='text' class='customInput' placeholder='Type a programming language' />
+    </div>
+    <section #suggestionTpl class='list-group results' *ngIf='showSuggestions'>
+        <a  class='list-group-item list-group-item-light'
+            *ngFor='let result of suggestionList; let i = index;'
+            [class.active]='markActive(i)'
+            (click)='writeValue(result)'>{{result}}
+        </a>
+    </section>
+</div>
