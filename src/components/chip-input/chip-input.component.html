@@ -1,1 +1,6 @@
-<input type="text" value='' placeholder='Type a programming language' />
+<div class='fakeInput'>
+    <div class='selectedItem' *ngFor='let item of selectedItems; let i = index;'>
+        <a href='#' (click)='removeItem(i)'class='badge badge-secondary'>{{item}} <span class='fa fa-times'></span></a>
+    </div>
+        <input #suggestionList type='text' (keyup)='writeValue($event)' class='customInput' placeholder='Type a programming language' />
+</div>

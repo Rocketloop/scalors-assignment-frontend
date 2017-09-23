@@ -1,0 +1,20 @@
+.customInput {
+    background: transparent;
+    border: transparent !important;
+    padding-left: 0;
+    outline: none;
+    width: 30%;
+}
+
+.fakeInput {
+    padding: .25rem;
+    margin: .25rem;
+    border: .5px solid #dbdbdb;
+    border-radius: 5px;
+    display: inline-block;
+    width: 60%;
+}
+
+.selectedItem {
+    display: inline;
+}
