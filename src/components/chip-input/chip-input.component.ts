@@ -48,6 +48,7 @@ export class ChipInputComponent implements ControlValueAccessor, OnInit, OnDestr
     public suggestionList: string[] = [];
     public showSuggestions: boolean = false;
 
+    private selectedIndex: number = 0;
     private _onChange = (_: any) => {};
     private subscrPool: Subscription[];
 
@@ -57,8 +58,9 @@ export class ChipInputComponent implements ControlValueAccessor, OnInit, OnDestr
         const keyup = Observable.fromEvent(this.hiddenInput.nativeElement, 'keyup').share();
         this.subscrPool = [
             this.findSuggestion(keyup),
-            this.controlDeletion(keyup),
-            this.keyboardNavigate(keyup)
+            this.controlDeletion(),
+            this.keyboardNavigate(keyup),
+            this.filterEnter(keyup)
         ];
     }
 
@@ -67,12 +69,13 @@ export class ChipInputComponent implements ControlValueAccessor, OnInit, OnDestr
         this.subscrPool.length = 0;
     }
 
-    public writeValue (value: any): void {
+    public writeValue (value: string): void {
         if (value !== '' && this.selectedItems.indexOf(value) < 0) {
             this.selectedItems.push(value);
             this._onChange(this.selectedItems);
         }
         this.hiddenInput.nativeElement.value = '';
+        this.selectedIndex = 0;
         this.suggestionList = [];
     }
 
@@ -88,7 +91,11 @@ export class ChipInputComponent implements ControlValueAccessor, OnInit, OnDestr
         }
     }
 
-    public findSuggestion(keyObj: Observable<{}>) {
+    public markActive(index: number) {
+        return (index === this.selectedIndex);
+    }
+
+    private findSuggestion(keyObj: Observable<{}>) {
         return keyObj.filter((e: any) => this.filterNonCharKey(e.keyCode))
             .map((e: any) => e.target.value )
             .debounceTime(350)
@@ -102,23 +109,35 @@ export class ChipInputComponent implements ControlValueAccessor, OnInit, OnDestr
             });
     }
 
-    public controlDeletion(keyObj) {
-        return keyObj.filter((e: any) => e.keyCode === 8) //handle backspace
-            .subscribe(x => {
+    private controlDeletion() {
+        const keyDown = Observable.fromEvent(this.hiddenInput.nativeElement, 'keydown').share();
+        return keyDown.filter((e: any) => e.keyCode === 8) //handle backspace
+            .subscribe( (ev: Event) => {
                 if (this.hiddenInput.nativeElement.value == '' && this.selectedItems.length > 0) {
                     this.removeItem(this.selectedItems.length - 1);
                 }
             });
     }
 
-    public keyboardNavigate(keyObj) {}
-
-    public markActive(index: number) {
-        return (index === this.selectedIndex);
+    private keyboardNavigate(keyObj: Observable<{}>) {
+        return keyObj.filter((e: any) => (e.keyCode === Key.Up || e.keyCode === Key.Down))
+            .map( (e: any) => e.keyCode)
+            .subscribe( kCode => {
+                if (this.suggestionList.length > 0) {
+                    if ( kCode === Key.Up && this.selectedIndex > 0 ) { this.selectedIndex-- }
+                    if ( (kCode === Key.Down || kCode === Key.Tab ) && (this.selectedIndex < this.suggestionList.length - 1) ) { this.selectedIndex++ }
+                }
+            });
     }
 
-    public handleSelectSuggestion(item: string) {
-        this.writeValue(item);
+    private filterEnter(keyObj: Observable<{}>) {
+        return keyObj.filter((e: any) => e.keyCode === Key.Enter)
+            .subscribe((ev: Event) => {
+                ev.preventDefault();
+                if (this.suggestionList.length > 0) {
+                    this.writeValue(this.suggestionList[this.selectedIndex]);
+                }
+            });
     }
 
     private findInArray(query: string): Observable<string[]> {
