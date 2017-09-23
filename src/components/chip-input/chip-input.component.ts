@@ -14,10 +14,10 @@ import 'rxjs/add/observable/of';
 import 'rxjs/add/observable/fromEvent';
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/concat';
-import 'rxjs/add/operator/distinctUntilChanged';
 import 'rxjs/add/operator/share';
 import 'rxjs/add/operator/filter';
 import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/switchMap';
 
 enum Key {
     Tab     = 9,
@@ -30,7 +30,7 @@ enum Key {
 }
 
 @Component({
-    selector: 'chip-input',
+    selector: 'app-chip-input',
     templateUrl: './chip-input.component.html',
     styleUrls: ['./chip-input.component.scss'],
     providers: [{
@@ -46,11 +46,11 @@ export class ChipInputComponent implements ControlValueAccessor, OnInit, OnDestr
 
     public selectedItems: string[] = [];
     public suggestionList: string[] = [];
-    public showSuggestions: boolean = false;
+    public showSuggestions = false;
 
-    private selectedIndex: number = 0;
-    private _onChange = (_: any) => {};
     private subscrPool: Subscription[];
+    private selectedIndex = 0;
+    private _onChange = (_: any) => {};
 
     constructor() {}
 
@@ -111,9 +111,9 @@ export class ChipInputComponent implements ControlValueAccessor, OnInit, OnDestr
 
     private controlDeletion() {
         const keyDown = Observable.fromEvent(this.hiddenInput.nativeElement, 'keydown').share();
-        return keyDown.filter((e: any) => e.keyCode === 8) //handle backspace
+        return keyDown.filter((e: any) => e.keyCode === 8) // handle backspace
             .subscribe( (ev: Event) => {
-                if (this.hiddenInput.nativeElement.value == '' && this.selectedItems.length > 0) {
+                if (this.hiddenInput.nativeElement.value === '' && this.selectedItems.length > 0) {
                     this.removeItem(this.selectedItems.length - 1);
                 }
             });
@@ -124,8 +124,10 @@ export class ChipInputComponent implements ControlValueAccessor, OnInit, OnDestr
             .map( (e: any) => e.keyCode)
             .subscribe( kCode => {
                 if (this.suggestionList.length > 0) {
-                    if ( kCode === Key.Up && this.selectedIndex > 0 ) { this.selectedIndex-- }
-                    if ( (kCode === Key.Down || kCode === Key.Tab ) && (this.selectedIndex < this.suggestionList.length - 1) ) { this.selectedIndex++ }
+                    if ( kCode === Key.Up && this.selectedIndex > 0 ) { this.selectedIndex--; }
+                    if ( (kCode === Key.Down || kCode === Key.Tab) && (this.selectedIndex < this.suggestionList.length - 1) ) {
+                        this.selectedIndex++;
+                    }
                 }
             });
     }
@@ -141,7 +143,7 @@ export class ChipInputComponent implements ControlValueAccessor, OnInit, OnDestr
     }
 
     private findInArray(query: string): Observable<string[]> {
-        let regexp = new RegExp(query, 'ig');
+        const regexp = new RegExp(query, 'ig');
         return this.typeahead.map(item => item.filter((el: string) => { return regexp.test(el); }));
     }
 
