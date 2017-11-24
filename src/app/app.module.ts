@@ -38,10 +38,12 @@ import {
 } from '@angular/material';
 
 import { AppComponent } from './app.component';
+import { ChipsInputComponent } from './components/chips-input/chips-input.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    ChipsInputComponent
   ],
   imports: [
     BrowserModule,
