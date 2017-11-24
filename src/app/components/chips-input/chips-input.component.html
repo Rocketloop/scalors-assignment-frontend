@@ -10,7 +10,7 @@
            [matChipInputFor]="chipList"
            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
            [matChipInputAddOnBlur]="addOnBlur"
-           (matChipInputTokenEnd)="add($event)" />
+           (matChipInputTokenEnd)="clear($event)" />
     <mat-autocomplete #auto="matAutocomplete" (optionSelected)="add($event)">
       <mat-option *ngFor="let option of filteredValues | async" [value]="option.name">
         {{ option.name }}

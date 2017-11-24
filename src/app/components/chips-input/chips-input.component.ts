@@ -49,10 +49,11 @@ constructor() {
     if ((val || '').trim()) {
       this.chipsList.push({ name: val.trim() });
     }
+  }
 
-    // Reset the input value
-    if (input) {
-      input.value = '';
+  clear(event: MatChipInputEvent) {
+  if (event.input) {
+    event.input.value = '';
     }
   }
 
