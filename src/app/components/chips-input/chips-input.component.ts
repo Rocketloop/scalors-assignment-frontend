@@ -1,4 +1,4 @@
-import {Component, Input, Output, EventEmitter} from '@angular/core';
+import {Component, Input, Output, EventEmitter, OnDestroy, OnInit} from '@angular/core';
 import {FormControl} from '@angular/forms';
 import {MatChipInputEvent, MatAutocompleteSelectedEvent} from '@angular/material';
 import {ENTER} from '@angular/cdk/keycodes';
@@ -7,6 +7,7 @@ import 'rxjs/add/operator/startWith';
 import 'rxjs/add/operator/map';
 
 import {Languages} from '../../shared/languages';
+import {Subscription} from "rxjs/Subscription";
 
 const COMMA = 188;
 
@@ -18,7 +19,7 @@ const COMMA = 188;
   templateUrl: './chips-input.component.html',
   styleUrls: ['./chips-input.component.css']
 })
-export class ChipsInputComponent  {
+export class ChipsInputComponent  implements OnInit, OnDestroy {
   selectable = true;
   removable = true;
   addOnBlur = true;
@@ -32,13 +33,18 @@ export class ChipsInputComponent  {
   @Output() chips = new EventEmitter();
   value: 'string';
   chipsList = [];
+  subscription: Subscription[] = [];
 
 constructor() {
   this.filteredValues = this.myControl.valueChanges
     .startWith(null)
     .map(state => state ? this.filterValues(state) : this.values.slice());
-
-  this.myControl.valueChanges.subscribe(value => this.value = value);
+}
+ngOnInit() {
+  this.subscription.push(this.myControl.valueChanges.subscribe(value => this.value = value));
+}
+ngOnDestroy() {
+  this.subscription.forEach(item => item.unsubscribe());
 }
 
   filterValues(name: string) {
@@ -72,7 +78,6 @@ constructor() {
   }
 
   emmitChips(): void {
-  console.log(this.chipsList);
     this.chips.emit(this.chipsList);
   }
 }
