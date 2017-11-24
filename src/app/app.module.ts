@@ -2,6 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {ReactiveFormsModule} from '@angular/forms';
 
 import {
   MatAutocompleteModule,
@@ -47,6 +48,7 @@ import { ChipsInputComponent } from './components/chips-input/chips-input.compon
   ],
   imports: [
     BrowserModule,
+    ReactiveFormsModule,
     BrowserAnimationsModule,
     MatAutocompleteModule,
     MatButtonModule,
