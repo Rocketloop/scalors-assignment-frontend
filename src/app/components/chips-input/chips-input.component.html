@@ -1,11 +1,12 @@
 <mat-form-field class="demo-chip-list">
   <mat-chip-list #chipList>
-    <mat-chip *ngFor="let chip of chipList" [selectable]="selectable"
-              [removable]="removable" (remove)="remove(fruit)">
-      {{fruit.name}}
+    <mat-chip *ngFor="let chip of chipsList" [selectable]="selectable"
+              [removable]="removable" (remove)="remove(chip)">
+      {{chip.name}}
       <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
     </mat-chip>
-    <input placeholder="New fruit..."
+    <input placeholder="Type a programming language"
+           matInput [formControl]="myControl" [matAutocomplete]="auto"
            [matChipInputFor]="chipList"
            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
            [matChipInputAddOnBlur]="addOnBlur"

@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {FormControl} from '@angular/forms';
-import {MatChipInputEvent} from '@angular/material';
+import {MatChipInputEvent, MatAutocompleteSelectedEvent} from '@angular/material';
 import {ENTER} from '@angular/cdk/keycodes';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/startWith';
@@ -27,11 +27,9 @@ export class ChipsInputComponent {
   // Enter, comma
   separatorKeysCodes = [ENTER, COMMA];
 
-  values = [
-    { name: 'Lemon' },
-    { name: 'Lime' },
-    { name: 'Apple' },
-  ];
+  chipsList = [];
+
+  values = [{name: 'Java'}, {name: 'Javascript'}, {name: 'PHP'}];
 
 constructor() {
   this.filteredValues = this.myControl.valueChanges
@@ -44,13 +42,12 @@ constructor() {
       state.name.toLowerCase().indexOf(name.toLowerCase()) === 0);
   }
 
-  add(event: MatChipInputEvent): void {
-    let input = event.input;
-    let value = event.value;
+  add(event: MatAutocompleteSelectedEvent): void {
+    const input = event.option;
+    const val = input.viewValue;
 
-    // Add our person
-    if ((value || '').trim()) {
-      this.values.push({ name: value.trim() });
+    if ((val || '').trim()) {
+      this.chipsList.push({ name: val.trim() });
     }
 
     // Reset the input value
@@ -59,11 +56,11 @@ constructor() {
     }
   }
 
-  remove(fruit: any): void {
-    let index = this.values.indexOf(fruit);
+  remove(item: any): void {
+    const index = this.chipsList.indexOf(item);
 
     if (index >= 0) {
-      this.values.splice(index, 1);
+      this.chipsList.splice(index, 1);
     }
   }
 }
