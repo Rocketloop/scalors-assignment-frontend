@@ -1,6 +1,6 @@
 <mat-form-field class="demo-chip-list">
   <mat-chip-list #chipList>
-    <mat-chip *ngFor="let fruit of fruits" [selectable]="selectable"
+    <mat-chip *ngFor="let chip of chipList" [selectable]="selectable"
               [removable]="removable" (remove)="remove(fruit)">
       {{fruit.name}}
       <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
@@ -10,6 +10,11 @@
            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
            [matChipInputAddOnBlur]="addOnBlur"
            (matChipInputTokenEnd)="add($event)" />
+    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="add($event)">
+      <mat-option *ngFor="let option of filteredValues | async" [value]="option.name">
+        {{ option.name }}
+      </mat-option>
+    </mat-autocomplete>
   </mat-chip-list>
 </mat-form-field>
 

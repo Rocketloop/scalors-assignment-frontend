@@ -1,6 +1,10 @@
 import {Component} from '@angular/core';
+import {FormControl} from '@angular/forms';
 import {MatChipInputEvent} from '@angular/material';
 import {ENTER} from '@angular/cdk/keycodes';
+import {Observable} from 'rxjs/Observable';
+import 'rxjs/add/operator/startWith';
+import 'rxjs/add/operator/map';
 
 const COMMA = 188;
 
@@ -13,10 +17,12 @@ const COMMA = 188;
   styleUrls: ['./chips-input.component.css']
 })
 export class ChipsInputComponent {
-  visible: boolean = true;
   selectable: boolean = true;
   removable: boolean = true;
   addOnBlur: boolean = true;
+
+  myControl = new FormControl();
+  filteredValues: Observable<any[]>;
 
   // Enter, comma
   separatorKeysCodes = [ENTER, COMMA];
@@ -27,7 +33,11 @@ export class ChipsInputComponent {
     { name: 'Apple' },
   ];
 
-
+constructor() {
+  this.filteredValues = this.myControl.valueChanges
+    .startWith(null)
+    .map(state => state ? this.filterValues(state) : this.values.slice());
+}
   add(event: MatChipInputEvent): void {
     let input = event.input;
     let value = event.value;
