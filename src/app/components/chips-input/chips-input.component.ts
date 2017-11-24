@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {Component, Input, Output, EventEmitter} from '@angular/core';
 import {FormControl} from '@angular/forms';
 import {MatChipInputEvent, MatAutocompleteSelectedEvent} from '@angular/material';
 import {ENTER} from '@angular/cdk/keycodes';
@@ -29,13 +29,16 @@ export class ChipsInputComponent  {
   // Enter, comma
   separatorKeysCodes = [ENTER, COMMA];
   @Input() values: Languages[];
-
+  @Output() chips = new EventEmitter();
+  value: 'string';
   chipsList = [];
 
 constructor() {
   this.filteredValues = this.myControl.valueChanges
     .startWith(null)
     .map(state => state ? this.filterValues(state) : this.values.slice());
+
+  this.myControl.valueChanges.subscribe(value => this.value = value);
 }
 
   filterValues(name: string) {
@@ -50,6 +53,7 @@ constructor() {
     if ((val || '').trim()) {
       this.chipsList.push({ name: val.trim() });
     }
+    this.emmitChips();
   }
 
   clear(event: MatChipInputEvent) {
@@ -64,6 +68,12 @@ constructor() {
     if (index >= 0) {
       this.chipsList.splice(index, 1);
     }
+    this.emmitChips();
+  }
+
+  emmitChips(): void {
+  console.log(this.chipsList);
+    this.chips.emit(this.chipsList);
   }
 }
 
