@@ -18,10 +18,10 @@ const COMMA = 188;
   templateUrl: './chips-input.component.html',
   styleUrls: ['./chips-input.component.css']
 })
-export class ChipsInputComponent {
-  selectable: boolean = true;
-  removable: boolean = true;
-  addOnBlur: boolean = true;
+export class ChipsInputComponent  {
+  selectable = true;
+  removable = true;
+  addOnBlur = true;
 
   myControl = new FormControl();
   filteredValues: Observable<Languages[]>;
