@@ -6,4 +6,19 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
+  languages = [{
+    name: 'Java'
+  }, {
+    name: 'Javascript'
+  }, {
+    name: 'Go lang'
+  }, {
+    name: 'C++'
+  }, {
+    name: 'PHP'
+  }, {
+    name: 'Ruby'
+  }, {
+    name: 'Objective-C'
+  }];
 }

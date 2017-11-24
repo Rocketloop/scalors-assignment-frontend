@@ -1,10 +1,12 @@
-import {Component} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {FormControl} from '@angular/forms';
 import {MatChipInputEvent, MatAutocompleteSelectedEvent} from '@angular/material';
 import {ENTER} from '@angular/cdk/keycodes';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/startWith';
 import 'rxjs/add/operator/map';
+
+import {Languages} from '../../shared/languages';
 
 const COMMA = 188;
 
@@ -22,14 +24,13 @@ export class ChipsInputComponent {
   addOnBlur: boolean = true;
 
   myControl = new FormControl();
-  filteredValues: Observable<any[]>;
+  filteredValues: Observable<Languages[]>;
 
   // Enter, comma
   separatorKeysCodes = [ENTER, COMMA];
+  @Input() values: Languages[];
 
   chipsList = [];
-
-  values = [{name: 'Java'}, {name: 'Javascript'}, {name: 'PHP'}];
 
 constructor() {
   this.filteredValues = this.myControl.valueChanges
@@ -57,7 +58,7 @@ constructor() {
     }
   }
 
-  remove(item: any): void {
+  remove(item: Languages): void {
     const index = this.chipsList.indexOf(item);
 
     if (index >= 0) {
@@ -65,5 +66,4 @@ constructor() {
     }
   }
 }
-
 
