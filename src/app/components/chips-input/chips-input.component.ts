@@ -27,7 +27,7 @@ export class ChipsInputComponent {
   // Enter, comma
   separatorKeysCodes = [ENTER, COMMA];
 
-  fruits = [
+  values = [
     { name: 'Lemon' },
     { name: 'Lime' },
     { name: 'Apple' },
@@ -38,13 +38,19 @@ constructor() {
     .startWith(null)
     .map(state => state ? this.filterValues(state) : this.values.slice());
 }
+
+  filterValues(name: string) {
+    return this.values.filter(state =>
+      state.name.toLowerCase().indexOf(name.toLowerCase()) === 0);
+  }
+
   add(event: MatChipInputEvent): void {
     let input = event.input;
     let value = event.value;
 
     // Add our person
     if ((value || '').trim()) {
-      this.fruits.push({ name: value.trim() });
+      this.values.push({ name: value.trim() });
     }
 
     // Reset the input value
@@ -54,10 +60,10 @@ constructor() {
   }
 
   remove(fruit: any): void {
-    let index = this.fruits.indexOf(fruit);
+    let index = this.values.indexOf(fruit);
 
     if (index >= 0) {
-      this.fruits.splice(index, 1);
+      this.values.splice(index, 1);
     }
   }
 }
