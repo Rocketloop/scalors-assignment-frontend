@@ -23,6 +23,7 @@ export class ChipsInputComponent  implements OnInit, OnDestroy {
   selectable = true;
   removable = true;
   addOnBlur = true;
+  hidePanel = true;
 
   myControl = new FormControl();
   filteredValues: Observable<Languages[]>;
@@ -31,17 +32,22 @@ export class ChipsInputComponent  implements OnInit, OnDestroy {
   separatorKeysCodes = [ENTER, COMMA];
   @Input() values: Languages[];
   @Output() chips = new EventEmitter();
-  value: 'string';
+  value: string;
   chipsList = [];
   subscription: Subscription[] = [];
 
-constructor() {
+constructor() {}
+ngOnInit() {
+  this.subscription.push(this.myControl.valueChanges.subscribe(value => {
+    this.value = value;
+    if (this.value) {
+      this.hidePanel = false;
+    }
+    console.log('Current value ', this.value);
+  }));
   this.filteredValues = this.myControl.valueChanges
     .startWith(null)
     .map(state => state ? this.filterValues(state) : this.values.slice());
-}
-ngOnInit() {
-  this.subscription.push(this.myControl.valueChanges.subscribe(value => this.value = value));
 }
 ngOnDestroy() {
   this.subscription.forEach(item => item.unsubscribe());
@@ -58,6 +64,7 @@ ngOnDestroy() {
 
     if ((val || '').trim()) {
       this.chipsList.push({ name: val.trim() });
+      this.values = this.values.filter(item => item.name !== val);
     }
     this.emmitChips();
   }
@@ -69,16 +76,23 @@ ngOnDestroy() {
   }
 
   remove(item: Languages): void {
-    const index = this.chipsList.indexOf(item);
 
+    const index = this.chipsList.indexOf(item);
     if (index >= 0) {
       this.chipsList.splice(index, 1);
+      this.values.push(item);
     }
     this.emmitChips();
+    this.value = '';
   }
 
   emmitChips(): void {
     this.chips.emit(this.chipsList);
+  }
+  onFocus() {
+    if (!this.value) {
+      this.hidePanel = true;
+    }
   }
 }
 

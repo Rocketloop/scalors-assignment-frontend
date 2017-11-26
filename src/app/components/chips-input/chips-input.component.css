@@ -1,3 +1,6 @@
 .demo-chip-list {
   width: 100%;
 }
+.visibility {
+  display: none;
+}

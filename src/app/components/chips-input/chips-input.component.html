@@ -11,11 +11,15 @@
              [matChipInputFor]="chipList"
              [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
              [matChipInputAddOnBlur]="addOnBlur"
+             (focus)="onFocus()"
              (matChipInputTokenEnd)="clear($event)" />
       <mat-autocomplete #auto="matAutocomplete" (optionSelected)="add($event)">
-        <mat-option *ngFor="let option of filteredValues | async" [value]="option.name">
-          {{ option.name }}
-        </mat-option>
+        <div [class.visibility]="hidePanel">
+          <mat-option *ngFor="let option of filteredValues | async" [value]="option.name">
+            {{ option.name }}
+          </mat-option>
+        </div>
+
       </mat-autocomplete>
     </mat-chip-list>
   </mat-form-field>
