@@ -1,0 +1,4 @@
+<div class="dropdown">
+  <div *ngFor="let item of searchValues$ | async"
+       (click)="addItem(item)">{{item}}</div>
+</div>
