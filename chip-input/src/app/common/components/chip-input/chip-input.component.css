@@ -1,0 +1,27 @@
+.container {
+  position: relative;
+}
+
+.input-container {
+  border: 1px solid gray;
+  border-radius: 3px;
+  padding: 3px 3px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.search-input {
+  border: none;
+  height: 30px;
+  outline: none;
+  flex: 1 1 auto;
+}
+
+app-chip-input-dropdown {
+  position: absolute;
+  z-index: 1000;
+  left: 0px;
+  width: 100%;
+  background-color: white;
+}

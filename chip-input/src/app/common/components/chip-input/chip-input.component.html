@@ -1,6 +1,16 @@
-<div>
-  <app-chip [value]="chip" (remove)="onRemove($event)" *ngFor="let chip of value"></app-chip>
-  <input #searchInput [(ngModel)]="searchStr" [placeholder]="placeholder">
+<div class="container">
+  <div class="input-container" #inputContainer>
+    <app-chip [value]="chip"
+              (remove)="onRemove($event)"
+              *ngFor="let chip of value"></app-chip>
+    <input #searchInput
+           class="search-input"
+           [(ngModel)]="searchStr"
+           [placeholder]="placeholder">
+  </div>
+  <app-chip-input-dropdown [style.top.px]="inputContainer.offsetHeight"
+                           [searchValues$]="searchValues$"
+                           (selected)="addItem($event)"
+                           #dropdown>
+  </app-chip-input-dropdown>
 </div>
-<app-chip-input-dropdown [searchValues$]="searchValues$" (selected)="addItem($event)" #dropdown>
-</app-chip-input-dropdown>
