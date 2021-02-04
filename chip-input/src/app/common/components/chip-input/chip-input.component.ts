@@ -1,6 +1,6 @@
 import {AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, forwardRef, Input, OnInit, ViewChild} from '@angular/core';
 import {NG_VALUE_ACCESSOR} from '@angular/forms';
-import {fromEvent, merge, Observable} from 'rxjs';
+import {fromEvent, merge, Observable, Subject} from 'rxjs';
 import {debounceTime, distinctUntilChanged, map, mapTo, switchMap} from 'rxjs/operators';
 
 @Component({
@@ -31,9 +31,9 @@ export class ChipInputComponent implements OnInit, AfterViewInit {
   searchStr: string;
 
   private val: Array<string> = [];
+  private selectSubject = new Subject();
 
   @ViewChild('searchInput') searchInput: ElementRef;
-  @ViewChild('dropdown', {read: ElementRef}) dropdown: ElementRef;
 
   ngAfterViewInit(): void {
      const keyupObservable = fromEvent(this.searchInput.nativeElement, 'input').pipe(
@@ -44,11 +44,11 @@ export class ChipInputComponent implements OnInit, AfterViewInit {
       map( results => results.filter(val => this.value.indexOf(val) === -1) ),
     );
 
-     const clickObservable = fromEvent(this.dropdown.nativeElement, 'click').pipe(
+     const selectObservable = this.selectSubject.asObservable().pipe(
        mapTo([])
      );
 
-     this.searchValues$ = merge(keyupObservable, clickObservable);
+     this.searchValues$ = merge(keyupObservable, selectObservable);
   }
 
   constructor() { }
@@ -75,6 +75,7 @@ export class ChipInputComponent implements OnInit, AfterViewInit {
   addItem(item: string): void {
     this.value = [...this.value, item];
     this.searchStr = '';
+    this.selectSubject.next();
   }
 
   onRemove(val: string): void {

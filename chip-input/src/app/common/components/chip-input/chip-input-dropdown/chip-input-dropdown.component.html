@@ -1,6 +1,8 @@
 <div class="dropdown" [class.visible]="(searchValues$ | async)?.length > 0">
   <div class="dropdown-item"
-       *ngFor="let item of searchValues$ | async"
-       (click)="addItem(item)">{{item}}
+       *ngFor="let item of searchValues$ | async; let i = index"
+       [class.selected]="i == selectedIndex"
+       (click)="addItem(item)">
+    {{item}}
   </div>
 </div>

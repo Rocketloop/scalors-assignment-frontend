@@ -13,6 +13,7 @@
   padding: 4px 0px;
 }
 
-.dropdown-item:hover {
+.dropdown-item.selected, .dropdown-item:hover {
   background-color: lightgray;
 }
+
