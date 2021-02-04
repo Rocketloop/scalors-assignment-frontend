@@ -1,0 +1,19 @@
+.dropdown {
+  border: 1px solid gray;
+  padding: 4px;
+  display: none;
+}
+
+.dropdown.visible {
+  display: block;
+}
+
+.dropdown-item {
+  cursor: pointer;
+  padding: 4px 0px;
+}
+
+.dropdown-item.selected, .dropdown-item:hover {
+  background-color: lightgray;
+}
+
