@@ -5,6 +5,11 @@
             <mat-icon matChipRemove>cancel</mat-icon>
         </mat-chip>
         <input placeholder="Type a Programming Language" autocomplete="off" #languageInput [(ngModel)]="value"
-            [matChipInputFor]="chipList" matInput [formControl]="formControl" [matChipInputSeparatorKeyCodes]="seperator" (keyup)="onKeyup($event)">
+            [matChipInputFor]="chipList" matInput [formControl]="formControl" [matChipInputSeparatorKeyCodes]="seperator" (keyup)="onKeyup($event)" [matAutocomplete]="auto">
     </mat-chip-list>
+    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+        <mat-option *ngFor="let option of filteredOptions | async" [value]="option" (optionSelected)="selected($event)">
+          {{option}}
+        </mat-option>
+      </mat-autocomplete>
 </mat-form-field>

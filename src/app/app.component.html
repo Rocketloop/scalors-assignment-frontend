@@ -1,5 +1,5 @@
 <div>
   <form [formGroup]="form">
-      <app-chips [values]="languages" formControlName="chip" name="chip" (keyup)="changed($event)"></app-chips>
+      <app-chips [values]="languages" [basicLanguages]="basicLanguages" formControlName="chip" name="chip" (keyup)="changed($event)"></app-chips>
   </form>
 </div>

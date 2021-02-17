@@ -10,6 +10,7 @@ export class AppComponent implements OnInit{
   title = 'scalors-assignment-frontend';
   form: FormGroup;
   languages: string[] = ['Angular'];
+  basicLanguages: string[] = ['Angular', 'JavaScript', 'TypeScript', 'Java', 'C#'];
 
   ngOnInit() {
     this.form = new FormGroup({
