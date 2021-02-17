@@ -9,6 +9,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 export class AppComponent implements OnInit {
   title = 'scalors-assignment-frontend';
   form: FormGroup;
+  languages: string[] = ['Angular'];
 
   ngOnInit() {
     this.form = new FormGroup({
