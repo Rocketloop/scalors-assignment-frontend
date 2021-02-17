@@ -6,7 +6,7 @@ import { FormControl, FormGroup } from '@angular/forms';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit{
   title = 'scalors-assignment-frontend';
   form: FormGroup;
   languages: string[] = ['Angular'];
@@ -15,5 +15,11 @@ export class AppComponent implements OnInit {
     this.form = new FormGroup({
       chip: new FormControl()
     });
+  }
+
+  changed($event): void {
+    if ($event.key && $event.key.toLowerCase() == 'enter') {
+      this.languages = this.form.controls.chip.value;
+    }
   }
 }

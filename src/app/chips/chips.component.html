@@ -1,0 +1,10 @@
+<mat-form-field class="main-container">
+    <mat-chip-list #chipList>
+        <mat-chip *ngFor="let value of values" (removed)="remove(value)">
+            {{value}}
+            <mat-icon matChipRemove>cancel</mat-icon>
+        </mat-chip>
+        <input placeholder="Type a Programming Language" autocomplete="off" #languageInput [(ngModel)]="value"
+            [matChipInputFor]="chipList" matInput [formControl]="formControl" [matChipInputSeparatorKeyCodes]="seperator" (keyup)="onKeyup($event)">
+    </mat-chip-list>
+</mat-form-field>
