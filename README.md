@@ -1,6 +1,6 @@
 # Frontend Assignment: Chip Input Component
 
-The assignment involves the creation of an Angular2+ component that implements the functionality of a chip input.
+The assignment involves the creation of an Angular 11 component that implements the functionality of a chip input.
 
 ## Chip Input
 
