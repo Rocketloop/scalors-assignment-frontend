@@ -29,3 +29,10 @@ form control value.
 
 Please note that we don't accept solutions without periodic commits or if we are unable to execute the solution.
 
+##How to run
+
+In root directory `npm install && npm start`
+
+Navigate to `http://localhost:4200` or click [here](http://localhost:4200)
+
+Have fun)))
